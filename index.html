@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="./fav-icon.png">
+    <title>Bill</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            font-size: 20px;
+        }
+
+
+        /* styling our header */
+        .header {
+            background: #9296f0;
+            height: 4em;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        
+        .form-container .form-item {
+            display: flex;
+            padding: 0.5em 1em;
+            /* justify-content: space-between; */
+            gap: 1em;
+            align-items: center;
+            margin-block: 1em;
+        }
+
+        .form-item input {
+            width: 70%;
+            outline: transparent;
+            background-color: rgb(243, 239, 239);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            border: none;
+            padding: 0.3em 0.6em;
+            position: relative;
+        }
+
+
+        .form-container {
+            height: calc(100dvh - 4em);
+            /* border: 2px solid black; */
+            display: flex;
+            flex-flow: column;
+            align-items: center;
+            justify-content: space-evenly;
+        }
+
+        .product-container {
+            display: flex;
+            flex-flow: column;
+            width: 90%;
+            margin-inline: auto;
+        }
+
+        .product {
+            display: flex;
+            justify-content: space-between;
+            margin-block: 0.5em;
+            align-items: center;
+        }
+
+        .product input {
+            width: 70%;
+            outline: transparent;
+            background-color: rgb(243, 239, 239);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            border: none;
+            padding: 0.3em 0.6em;
+            width: 50%;
+        }
+
+        .bill-container {
+            min-height: 100vh;
+            background: rgb(243, 235, 235);
+            display: flex;
+            flex-flow: column;
+            /* align-items: center; */
+            justify-content: center;
+        }
+
+        .customer-info {
+            display: flex;
+            flex-flow: column;
+            /* border: 2px solid black; */
+            gap: 0.5em;
+            padding: 0.5em;
+        }
+
+        table {
+            border: 2px solid black;
+            margin: 0.2em;
+        }
+
+        thead {
+            font-weight: bold;
+        }
+
+        .grandtotal-contanier {
+            display: block;
+            margin: 1em;
+            text-align: right;
+        }
+
+        #clear {
+            padding: 0.4em 0.8em;
+            background: #9296f0;
+            color: white;
+            border: transparent;
+            font-weight: bolder;
+            width: 80%;
+            display: block;
+            margin: 0.3em auto;
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <div class="header">
+            <h2>RM Pori Traders</h2>
+        </div>
+        <div class="form-container">
+            <div class="customer-info-container">
+                <div class="form-item">
+                    <label>Name : </label>
+                    <input id="Name" type="text" placeholder="Enter customer Name ..">
+                </div>
+            </div>
+            <div class="product-container">
+                <div class="product">
+                    <span class="product-name">Pori :</span>
+                    <input id="pori" type="number" placeholder="Quantity">
+                </div>
+                <div class="product">
+                    <span class="product-name">Chapati :</span>
+                    <input id="chapati" type="number" placeholder="Quantity">
+                </div>
+                <div class="product">
+                    <span class="product-name">Parota :</span>
+                    <input id="parota" type="number" placeholder="Quantity">
+                </div>
+                <div class="product">
+                    <span class="product-name">Shahi Parota :</span>
+                    <input id="shahiParota" type="number" placeholder="Quantity">
+                </div>
+                <div class="product">
+                    <span class="product-name">Poran Pori :</span>
+                    <input id="poranPori" type="number" placeholder="Quantity">
+                </div>
+            </div>
+            <button id="clear">CLEAR</button>
+        </div>
+    </nav>
+    <div class="bill-container">
+        <div class="customer-info">
+            <h3>Name : <span id="target-name"></span></h3>
+            <h3>Date : <span id="target-date"></span></h3>
+        </div>
+        <table border="1px">
+            <thead>
+                <td>Item</td>
+                <td>Price(Rs.)</td>
+                <td>Quantity</td>
+                <td>Amount</td>
+            </thead>
+            <tbody id="bill-sheet">
+                <!-- <tr>
+                <td>Pori</td>
+                <td>75</td>
+                <td>1</td>
+                <td>75</td>
+            </tr> -->
+
+            </tbody>
+        </table>
+        <div class="grandtotal-contanier">
+            <h3 id="grandtotal">Total Amount is Rs. <span id="gtotal"></span></h2>
+        </div>
+    </div>
+</body>
+<script>
+
+document.getElementById('Name').addEventListener('keyup',function(){
+    document.getElementById('target-name').innerHTML =this.value; 
+})
+
+let date = new Date();
+let currentDate = `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}`;
+document.getElementById('target-date').innerHTML =currentDate; 
+
+let itemPrice={
+    pori: 45,
+    chapati : 50,
+    parota : 90,
+    shahiParota : 92,
+    poranPori : 105
+}
+
+let poriTotalAmount=0,chapatiTotalAmount=0,parotaTotalAmount = 0, shahiParotaTotalAmount = 0,poranPoriTotalAmount=0;
+let poriValue='',chapatiValue='',parotaValue='', shahiParotaValue='', poranPoriValue='';
+//for pori.
+document.getElementById('pori').addEventListener('keyup',function(){
+   if(this.value==""|| this.value==0)
+   {
+    poriValue='';
+    poriTotalAmount=0;
+    show();
+   }
+   else{
+    poriValue = `<tr><td>Pori</td><td>${itemPrice.pori}</td><td>${this.value}</td><td>${itemPrice.pori}X${this.value}=${poriTotalAmount=(itemPrice.pori)*(this.value)}</td></tr>`;
+    show();
+   }
+})
+
+//for chapati.
+document.getElementById('chapati').addEventListener('keyup',function(){
+    if(this.value==""|| this.value==0)
+    {
+     chapatiValue='';
+     chapatiTotalAmount=0;
+     show();
+    }
+    else{
+      chapatiValue = `<tr><td>Chapati</td><td>${itemPrice.chapati}</td><td>${this.value}</td><td>${itemPrice.chapati}X${this.value}=${chapatiTotalAmount=(itemPrice.chapati)*(this.value)}</td></tr>`;
+      show();
+    }
+ })
+//for parota
+document.getElementById('parota').addEventListener('keyup',function(){
+    if(this.value==""|| this.value==0)
+    {
+     parotaValue='';
+     parotaTotalAmount=0;
+     show();
+    }
+    else{
+      parotaValue = `<tr><td>parota</td><td>${itemPrice.parota}</td><td>${this.value}</td><td>${itemPrice.parota}X${this.value}=${parotaTotalAmount=(itemPrice.parota)*(this.value)}</td></tr>`;
+      show();
+    }
+ })
+//for shahi parota
+document.getElementById('shahiParota').addEventListener('keyup',function(){
+    if(this.value==""|| this.value==0)
+    {
+     shahiParotaValue='';
+     shahiParotaTotalAmount=0;
+     show();
+    }
+    else{
+      shahiParotaValue = `<tr><td>shahiParota</td><td>${itemPrice.shahiParota}</td><td>${this.value}</td><td>${itemPrice.shahiParota}X${this.value}=${shahiParotaTotalAmount = (itemPrice.shahiParota)*(this.value)}</td></tr>`;
+      show();
+    }
+ })
+//poran pori
+document.getElementById('poranPori').addEventListener('keyup',function(){
+    if(this.value==""|| this.value==0)
+    {
+     poranPoriValue='';
+     poriTotalAmount=0;
+     show();
+    }
+    else{
+      poranPoriValue = `<tr><td>poranpori</td><td>${itemPrice.poranPori}</td><td>${this.value}</td><td>${itemPrice.poranPori}X${this.value}=${poranPoriTotalAmount=(itemPrice.poranPori)*(this.value)}</td></tr>`;
+      show();
+    }
+ })
+function show() {
+    document.getElementById('bill-sheet').innerHTML = poriValue + chapatiValue + parotaValue + shahiParotaValue + poranPoriValue ;
+    let grandTotal=poriTotalAmount+chapatiTotalAmount+parotaTotalAmount+shahiParotaTotalAmount+poranPoriTotalAmount;
+document.getElementById('gtotal').innerHTML=grandTotal;
+}
+
+document.getElementById('clear').addEventListener('click',()=>{
+    let allinputs=document.querySelectorAll('input');
+    console.log(allinputs);
+    allinputs.forEach(input=>{
+        input.value='';
+    })
+    location.reload();
+})
+
+</script>
+
+</html>
